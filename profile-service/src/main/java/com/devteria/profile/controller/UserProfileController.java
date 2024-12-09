@@ -11,13 +11,13 @@ import com.devteria.profile.service.UserProfileService;
 
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserProfileController {
 
   private final UserProfileService userProfileService;
 
-  @PostMapping("users")
+  @PostMapping
   UserProfileResponse createProfile(@RequestBody UserProfileCreationRequest request) {
     return userProfileService.createUserProfile(request);
   }
