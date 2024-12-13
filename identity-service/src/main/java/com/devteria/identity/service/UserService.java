@@ -1,5 +1,8 @@
 package com.devteria.identity.service;
 
+import com.devteria.identity.dto.request.UserProfileRequest;
+import com.devteria.identity.mapper.UserProfileMapper;
+import com.devteria.identity.repository.httpclient.ProfileClient;
 import java.util.HashSet;
 import java.util.List;
 
@@ -32,7 +35,9 @@ import lombok.extern.slf4j.Slf4j;
 public class UserService {
     UserRepository userRepository;
     RoleRepository roleRepository;
+    ProfileClient profileClient;
     UserMapper userMapper;
+    UserProfileMapper userProfileMapper;
     PasswordEncoder passwordEncoder;
 
     public UserResponse createUser(UserCreationRequest request) {
@@ -45,8 +50,14 @@ public class UserService {
         roleRepository.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
 
         user.setRoles(roles);
+        user = userRepository.save(user);
 
-        return userMapper.toUserResponse(userRepository.save(user));
+        UserProfileRequest userProfileRequest = userProfileMapper.toUserProfileRequest(request);
+        userProfileRequest.setUserId(user.getId());
+
+        profileClient.createUserProfile(userProfileRequest);
+
+        return userMapper.toUserResponse(user);
     }
 
     public UserResponse getMyInfo() {

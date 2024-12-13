@@ -1,5 +1,7 @@
 package com.devteria.identity.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -11,6 +13,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@JsonInclude(Include.NON_NULL)
 public class UserResponse {
     String id;
     String username;

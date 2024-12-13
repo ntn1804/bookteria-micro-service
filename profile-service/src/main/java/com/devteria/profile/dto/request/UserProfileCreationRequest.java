@@ -8,8 +8,9 @@ import lombok.Setter;
 @Getter
 public class UserProfileCreationRequest {
 
-  String firstName;
-  String lastName;
-  LocalDate dob;
-  String city;
+  private String userId;
+  private String firstName;
+  private String lastName;
+  private LocalDate dob;
+  private String city;
 }
