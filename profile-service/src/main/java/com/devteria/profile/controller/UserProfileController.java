@@ -2,6 +2,7 @@ package com.devteria.profile.controller;
 
 import com.devteria.profile.dto.request.UserProfileCreationRequest;
 import com.devteria.profile.dto.response.UserProfileResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,11 @@ public class UserProfileController {
   @GetMapping("/{userId}")
   UserProfileResponse getUserProfile(@PathVariable String userId) {
     return userProfileService.getUserProfile(userId);
+  }
+
+  @GetMapping
+  List<UserProfileResponse> getAllUserProfile() {
+    return userProfileService.getAllUserProfile();
   }
 
 }
