@@ -1,4 +1,4 @@
-package com.devteria.identity.configuration;
+package com.devteria.profile.configuration;
 
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;

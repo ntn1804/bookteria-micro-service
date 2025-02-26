@@ -4,6 +4,7 @@ import com.devteria.profile.dto.request.UserProfileCreationRequest;
 import com.devteria.profile.dto.response.UserProfileResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +31,7 @@ public class UserProfileController {
     return userProfileService.getUserProfile(userId);
   }
 
+  @PreAuthorize("hasRole('ADMIN')")
   @GetMapping
   List<UserProfileResponse> getAllUserProfile() {
     return userProfileService.getAllUserProfile();

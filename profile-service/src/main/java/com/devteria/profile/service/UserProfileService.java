@@ -5,7 +5,6 @@ import com.devteria.profile.dto.response.UserProfileResponse;
 import com.devteria.profile.entity.UserProfile;
 import com.devteria.profile.mapper.UserProfileMapper;
 import com.devteria.profile.repository.UserProfileRepository;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
