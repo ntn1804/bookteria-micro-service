@@ -30,8 +30,8 @@ public class EmailService {
                         .email("ntn1804.dev@gmail.com")
                         .name("ntn1804.dev")
                         .build())
-                .subject("Brevo test email")
-                .htmlContent("<p>Hello nghiant</p>")
+                .subject(userEmailRequest.getSubject())
+                .htmlContent(userEmailRequest.getHtmlContent())
                 .to(List.of(userEmailRequest.getRecipient()))
                 .build();
 

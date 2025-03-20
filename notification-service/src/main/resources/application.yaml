@@ -13,9 +13,11 @@ spring:
     consumer:
       group-id: notification-group
       auto-offset-reset: earliest
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
 
 client:
   brevo:
-    api-key: "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"
+    api-key: "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"

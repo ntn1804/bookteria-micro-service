@@ -1,5 +1,6 @@
 package com.devteria.identity.service;
 
+import com.devteria.event.dto.NotificationEvent;
 import com.devteria.identity.constant.PredefinedRole;
 import com.devteria.identity.dto.request.UserCreationRequest;
 import com.devteria.identity.dto.request.UserProfileRequest;
@@ -39,7 +40,7 @@ public class UserService {
   UserMapper userMapper;
   UserProfileMapper userProfileMapper;
   PasswordEncoder passwordEncoder;
-  KafkaTemplate<String, String> kafkaTemplate;
+  KafkaTemplate<String, Object> kafkaTemplate;
 
   @Transactional
   public UserResponse createUser(UserCreationRequest request) {
@@ -61,7 +62,14 @@ public class UserService {
 
     profileClient.createUserProfile(userProfileRequest);
 
-    kafkaTemplate.send("onboard-successful", "Welcome to our App: " + user.getUsername());
+    NotificationEvent notificationEvent = NotificationEvent.builder()
+        .channel("EMAIL")
+        .recipientEmail(user.getEmail())
+        .subject("Welcome to our App")
+        .body("Hello, " + user.getUsername())
+        .build();
+
+    kafkaTemplate.send("notification-delivery", notificationEvent);
 
     return userMapper.toUserResponse(user);
   }
