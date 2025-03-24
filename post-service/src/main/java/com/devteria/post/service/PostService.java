@@ -1,15 +1,19 @@
 package com.devteria.post.service;
 
+import com.devteria.post.dto.PageResponse;
 import com.devteria.post.dto.request.PostRequest;
 import com.devteria.post.dto.response.PostResponse;
 import com.devteria.post.entity.Post;
 import com.devteria.post.mapper.PostMapper;
 import com.devteria.post.repository.PostRepository;
 import java.time.Instant;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -38,12 +42,21 @@ public class PostService {
     return postMapper.toPostResponse(post);
   }
 
-  public List<PostResponse> getListPost() {
+  public PageResponse<PostResponse> getListPost(int pageNum, int pageSize) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     String userId = authentication.getName();
 
-    List<Post> listPost = postRepository.findAllByUserId(userId);
+    Sort sort = Sort.by("createdDate").descending();
+    Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
 
-    return listPost.stream().map(postMapper::toPostResponse).toList();
+    Page<Post> pageData = postRepository.findAllByUserId(userId, pageable);
+
+    return PageResponse.<PostResponse>builder()
+        .currentPage(pageNum)
+        .pageSize(pageSize)
+        .totalElements(pageData.getTotalElements())
+        .totalPage(pageData.getTotalPages())
+        .data(pageData.getContent().stream().map(postMapper::toPostResponse).toList())
+        .build();
   }
 }
