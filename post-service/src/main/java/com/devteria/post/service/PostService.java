@@ -7,6 +7,7 @@ import com.devteria.post.entity.Post;
 import com.devteria.post.mapper.PostMapper;
 import com.devteria.post.repository.PostRepository;
 import java.time.Instant;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -25,6 +26,7 @@ public class PostService {
 
   PostMapper postMapper;
   PostRepository postRepository;
+  DateTimeFormatter dateTimeFormatter;
 
   public PostResponse createPost(PostRequest request) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -51,12 +53,18 @@ public class PostService {
 
     Page<Post> pageData = postRepository.findAllByUserId(userId, pageable);
 
+    List<PostResponse> postResponseList = pageData.getContent().stream().map(post -> {
+      PostResponse postResponse = postMapper.toPostResponse(post);
+      postResponse.setFormattedCreatedDate(dateTimeFormatter.format(post.getCreatedDate()));
+      return postResponse;
+    }).toList();
+
     return PageResponse.<PostResponse>builder()
         .currentPage(pageNum)
         .pageSize(pageSize)
         .totalElements(pageData.getTotalElements())
         .totalPage(pageData.getTotalPages())
-        .data(pageData.getContent().stream().map(postMapper::toPostResponse).toList())
+        .data(postResponseList)
         .build();
   }
 }
