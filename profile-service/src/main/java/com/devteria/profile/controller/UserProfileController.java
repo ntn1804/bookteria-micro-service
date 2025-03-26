@@ -26,9 +26,14 @@ public class UserProfileController {
     return userProfileService.createUserProfile(request);
   }
 
-  @GetMapping("/{userId}")
-  UserProfileResponse getUserProfile(@PathVariable String userId) {
-    return userProfileService.getUserProfile(userId);
+  @GetMapping("/{userProfileId}")
+  UserProfileResponse getUserProfile(@PathVariable String userProfileId) {
+    return userProfileService.getUserProfile(userProfileId);
+  }
+
+  @GetMapping("/internal/{userId}")
+  UserProfileResponse getUserProfileByUserId(@PathVariable String userId) {
+    return userProfileService.getUserProfileByUserId(userId);
   }
 
   @PreAuthorize("hasRole('ADMIN')")
