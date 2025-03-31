@@ -1,6 +1,7 @@
 package com.devteria.file.controller;
 
 import com.devteria.file.dto.ApiResponse;
+import com.devteria.file.dto.response.FileResponse;
 import com.devteria.file.service.FileService;
 import java.io.IOException;
 import lombok.AccessLevel;
@@ -19,9 +20,9 @@ public class FileController {
   FileService fileService;
 
   @PostMapping("/media/upload")
-  public ApiResponse<Object> uploadFile(@RequestParam("file") MultipartFile file)
+  public ApiResponse<FileResponse> uploadFile(@RequestParam("file") MultipartFile file)
       throws IOException {
-    return ApiResponse.builder()
+    return ApiResponse.<FileResponse>builder()
         .result(fileService.uploadFile(file))
         .build();
   }
