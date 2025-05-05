@@ -14,5 +14,6 @@ spring:
 
 app:
   file:
-    storage-directory: D:\Working\Training\BE\bookteria\file-upload
+#    storage-directory: D:\Working\Training\BE\bookteria\file-upload
+    storage-directory: file-upload
     prefix-download-url: http://localhost:8888/api/v1/file/media/
