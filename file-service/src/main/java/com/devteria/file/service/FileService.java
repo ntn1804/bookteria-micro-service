@@ -1,7 +1,10 @@
 package com.devteria.file.service;
 
+import com.devteria.file.dto.response.FileData;
 import com.devteria.file.dto.response.FileResponse;
 import com.devteria.file.entity.File;
+import com.devteria.file.exception.AppException;
+import com.devteria.file.exception.ErrorCode;
 import com.devteria.file.repository.FileRepository;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,10 +13,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 import java.util.UUID;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -51,6 +53,7 @@ public class FileService {
     String userId = SecurityContextHolder.getContext().getAuthentication().getName();
 
     File savedFile = File.builder()
+        .id(fileName)
         .contentType(file.getContentType())
         .ownerId(userId)
         .size(file.getSize())
@@ -64,5 +67,14 @@ public class FileService {
         .originalFileName(file.getOriginalFilename())
         .downloadUrl(prefixDownloadUrl + fileName)
         .build();
+  }
+
+  public FileData downloadFile(String fileName) throws IOException {
+    File file = fileRepository.findById(fileName)
+        .orElseThrow(() -> new AppException(ErrorCode.FILE_NOT_FOUND));
+
+    // Read file from disk
+    byte[] imageBytes = Files.readAllBytes(Paths.get(file.getPath()));
+    return new FileData(file.getContentType(), new ByteArrayResource(imageBytes));
   }
 }
