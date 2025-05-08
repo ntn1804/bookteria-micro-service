@@ -1,23 +1,20 @@
-package com.devteria.profile.dto.response;
+package com.devteria.profile.dto.request;
 
 import java.time.LocalDate;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-@Getter
 @Setter
-@Builder
+@Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserProfileResponse {
-  String id;
-  String userId;
+public class UpdateProfileRequest {
   String firstName;
   String lastName;
   String email;
-  String avatar;
-  LocalDate dob;
   String city;
+  LocalDate dob;
+  String avatar;
+
 }

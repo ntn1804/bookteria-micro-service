@@ -1,12 +1,15 @@
 package com.devteria.profile.mapper;
 
+import com.devteria.profile.dto.request.UpdateProfileRequest;
 import com.devteria.profile.dto.request.UserProfileCreationRequest;
 import com.devteria.profile.dto.response.UserProfileResponse;
 import com.devteria.profile.entity.UserProfile;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
 @Mapper
 public interface UserProfileMapper {
   UserProfile toUserProfile(UserProfileCreationRequest request);
   UserProfileResponse toUserProfileResponse(UserProfile userProfile);
+  void updateUserProfile(@MappingTarget UserProfile userProfile, UpdateProfileRequest request);
 }
